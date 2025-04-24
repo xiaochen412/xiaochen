@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>问卷结果</title><!-- 小标题 -->
+    <!-- CSS样式 -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .result-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            padding: 30px;
+            text-align: center;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .score-display {
+            font-size: 72px;
+            font-weight: bold;
+            margin: 30px 0;
+            background: linear-gradient(135deg, #3498db, #9b59b6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .comment {
+            font-size: 20px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .emoji {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .details {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: left;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .detail-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .btn-return {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-return:hover {
+            background-color: #2980b9;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            border-radius: 5px;
+            transition: width 1s ease-out;
+        }
+    </style>
+</head>
+<body><!-- html主体 -->
+    <div class="result-container">
+        <h1>感谢您的参与！</h1><!-- 标题 -->
+        <div class="emoji" id="emoji">😊</div><!-- 一个表情，不想要的话删了就行 -->
+        <div class="score-display" id="score">0%</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="comment" id="comment">正在计算您的结果...</div>
+        
+        <div class="details" id="details">
+            <h3>详细评分：</h3>
+            <!-- 这里会动态添加详细评分 -->
+        </div>
+        
+        <button class="btn-return" onclick="window.location.href='/'">返回问卷</button>
+    </div>
+
+    <script>
+        // 从URL获取参数
+        const urlParams = new URLSearchParams(window.location.search);
+        const score = urlParams.get('score');
+        const comment = urlParams.get('comment');
+        const q1 = urlParams.get('q1');
+        const q2 = urlParams.get('q2');
+        const q3 = urlParams.get('q3');
+        
+        // 显示结果
+        document.getElementById('score').textContent = score + '%';
+        document.getElementById('comment').textContent = comment;
+        document.getElementById('progressBar').style.width = score + '%';
+        
+        // 根据分数显示不同的emoji
+        const emojiElement = document.getElementById('emoji');
+        const numScore = parseInt(score);
+        if (numScore >= 90) {
+            emojiElement.textContent = '😍';
+        } else if (numScore >= 70) {
+            emojiElement.textContent = '😊';
+        } else if (numScore >= 50) {
+            emojiElement.textContent = '🙂';
+        } else {
+            emojiElement.textContent = '😕';
+        }
+        
+        // 添加详细评分，自定义内容
+        const detailsElement = document.getElementById('details');
+        detailsElement.innerHTML += `
+            <div class="detail-item">
+                <span>问题1: 产品满意度</span>
+                <span>${q1}/5</span>
+            </div>
+            <div class="detail-item">
+                <span>问题2: 推荐意愿</span>
+                <span>${q2}/5</span>
+            </div>
+            <div class="detail-item">
+                <span>问题3: 客户服务</span>
+                <span>${q3}/5</span>
+            </div>
+            <div class="detail-item" style="font-weight:bold;">
+                <span>总分</span>
+                <span>${parseInt(q1) + parseInt(q2) + parseInt(q3)}/15</span>
+            </div>
+        `;
+        
+        // 动画效果 - 数字增长
+        let current = 0;
+        const target = numScore;
+        const scoreElement = document.getElementById('score');
+        const interval = setInterval(() => {
+            current += 1;
+            scoreElement.textContent = current + '%';
+            document.getElementById('progressBar').style.width = current + '%';
+            
+            if (current >= target) {
+                clearInterval(interval);
+            }
+        }, 20);
+    </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+首先打开一个cmd用ssh root@<你的公网ip> 连接服务器，输入你设置的密码。用于远程控制
+同时再打开一个cmd，用sftp root@<你的公网ip>连接服务器，输入你的密码。用于远程传输文件
+
+进入ubuntu服务器后需要下载
+node.js(javascript运行环境)
+npm(包管理)
+nginx(web服务器)
+数据库（mysql）
+pm2(node.js进程管理)
+
+更新软件包
+sudo apt update
+安装
+sudo apt install nodejs npm -y
+sudo apt install nginx -y
+sudo apt install mysql-server -y
+sudo npm install -g pm2
+
+然后配置数据库密码
+mysql -u root 进入数据库（初次进入不需要密码）
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '你的新密码';  （配置密码）
+FLUSH PRIVILEGES;  刷新权限
+exit; 退出数据库
+
+再次进入数据库就需要密码了
+mysql -u root -p  
+输入密码进入数据库
+CREATE DATABASE survey_db; #创建survey_db数据库
+USE survey_db; #使用该数据库
+CREATE TABLE responses (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  q1 INT NOT NULL,
+  q2 INT NOT NULL,
+  q3 INT NOT NULL,
+  submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);  #创建表格responses,如果你在前端修改了问题数量，那么要在这里同步更新表的样式
+exit; 配置好后退出即可
+
+更改项目包内代码适应你的需求
+
+打开ssh的命令行界面，输入
+mkdir /xiaochen
+mkdir /xiaochen/server
+此操作会创建/xiaochen文件夹，并在其下创建server子文件夹用于储存项目包(自定义，但需要记住位置)
+
+打开sftp的命令行页面，输入
+put -c D:/xiaochen/survey /xiaochen/server
+此操作会将D:/xiaochen/survey（改为你的项目包的位置）整个传输到服务器上/xiaochen/server（储存项目包的位置）文件夹下
+
+万事具备,跳转至server.js所在文件夹运行项目
+cd /xiaochen/server/survey
+pm2 start server.js -n survey #用pm2进程管理工具启动server.js并将进程命名为survey
+
+接下来打开 <公网ip>:3000 就能看到你的调查界面了。

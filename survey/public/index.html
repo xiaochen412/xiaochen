@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>满意度调查问卷</title><!-- 小标题（网页缩放时的名字显示） -->
+  <!-- 下面是CSS定义，就是定义外观 -->
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      color: #333;
+    }
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      display: block;
+      margin: 0 auto;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    .question {
+      background-color: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    .instructions {
+      font-size: 14px;
+      color: #7f8c8d;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<!-- 这是 HTML 主体 -->
+<body>
+  <h1>满意度调查问卷</h1><!-- 标题 -->
+  <p>请根据您的真实感受对以下问题进行评分（1-5分）：</p>
+  
+  <form action="/submit" method="POST"><!-- 传送到submit路由，处理数据 -->
+    <div class="question">
+      <div class="form-group">
+        <label for="q1">1. 您对我们的产品满意度如何？</label><!-- 问题 -->
+        <input type="number" id="q1" name="q1" min="1" max="5" required>
+        <p class="instructions">1分=非常不满意，5分=非常满意</p><!-- 答案 -->
+      </div>
+    </div>
+    
+    <div class="question">
+      <div class="form-group">
+        <label for="q2">2. 您会向朋友或同事推荐我们的产品吗？</label>
+        <input type="number" id="q2" name="q2" min="1" max="5" required>
+        <p class="instructions">1分=绝对不会，5分=一定会</p>
+      </div>
+    </div>
+    
+    <div class="question">
+      <div class="form-group">
+        <label for="q3">3. 您对我们客户服务的评价如何？</label>
+        <input type="number" id="q3" name="q3" min="1" max="5" required>
+        <p class="instructions">1分=非常差，5分=非常好</p>
+      </div>
+    </div>
+    <!-- 这里是写了3个问题，如果要自定义数量的话，记得要同步更新server.js中submit路由的部分，调整接收对象，把新的问题加进去
+     还要更新一下数据库，增加新问题答案存储的位置-->
+    <button type="submit">提交问卷</button>
+  </form>
+  
+  <!-- 管理员链接 -->
+  <div style="margin-top: 30px; text-align: center;">
+    <a href="/admin" style="color: #7f8c8d; font-size: 14px;">管理员查看</a>
+  </div>
+</body>
+</html>
