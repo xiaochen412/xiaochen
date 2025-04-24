@@ -49,6 +49,7 @@ put -c D:/xiaochen/survey /xiaochen/server
 
 万事具备,跳转至server.js所在文件夹运行项目
 cd /xiaochen/server/survey
+npm install
 pm2 start server.js -n survey #用pm2进程管理工具启动server.js并将进程命名为survey
 
 接下来打开 <公网ip>:3000 就能看到你的调查界面了。
