@@ -11,7 +11,9 @@ pm2(node.js进程管理)
 更新软件包
 sudo apt update
 安装
-sudo apt install nodejs npm -y
+sudo apt install npm -y
+sudo npm install -g n
+sudo n 18
 sudo apt install nginx -y
 sudo apt install mysql-server -y
 sudo npm install -g pm2
