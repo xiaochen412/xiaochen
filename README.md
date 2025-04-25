@@ -18,7 +18,11 @@ sudo apt update
 
 安装
 
-sudo apt install nodejs npm -y
+sudo apt install npm -y
+
+sudo npm install -g n
+
+sudo n 18
 
 sudo apt install nginx -y
 
